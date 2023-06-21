@@ -13,7 +13,7 @@ public class NotFoundException extends RuntimeException {
         this.url=url;
     }
 
-    public String getResponse() {
+    public String getErrorMessage() {
         return errorMessage;
     }
 
