@@ -58,7 +58,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 });
 
         super.configure(http);
-
         http.csrf().disable();
         http.headers().frameOptions().disable();
 
@@ -76,6 +75,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         authenticationProvider.setUserDetailsService(userService);
         return authenticationProvider;
     }
-
-
 }

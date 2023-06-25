@@ -1,12 +1,12 @@
-package my.group.Exception;
+package my.group.exception;
 
 import org.springframework.http.HttpStatus;
 
-public class NoContentException extends RuntimeException{
+public class NotFoundException extends RuntimeException {
     private final String errorMessage;
     private final String url;
     private final HttpStatus httpStatus;
-    public NoContentException( String error, String url) {
+    public NotFoundException( String error, String url) {
         super(error);
         this.errorMessage=error;
         this.httpStatus=HttpStatus.NOT_FOUND;

@@ -1,4 +1,4 @@
-package my.group.Exception;
+package my.group.exception;
 
 import org.springframework.http.HttpStatus;
 

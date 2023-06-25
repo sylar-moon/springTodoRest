@@ -2,6 +2,7 @@ package my.group.model;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 
 @Table(name = "user",
@@ -12,9 +13,11 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Column
+    @NotBlank
     private String username;
-
+    @Column
+    @NotBlank
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER,
@@ -66,5 +69,15 @@ public class User {
     public User setRoles(Collection<Role> roles) {
         this.roles = roles;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
+                '}';
     }
 }

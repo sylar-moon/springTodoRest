@@ -3,6 +3,8 @@ package my.group.service;
 import my.group.model.Role;
 import my.group.model.User;
 import my.group.repository.UserRepository;
+import my.group.utility.MyLogger;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,14 +19,16 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
-    private UserRepository repository;
+    private final Logger logger = new MyLogger().getLogger();
+
     @Autowired
-    public void setRepository(UserRepository repository) {
-        this.repository = repository;
-    }
+    private UserRepository repository;
 
     public User findByUserName(String username){
-        return repository.findUserByUsername(username);
+        User user = repository.findUserByUsername(username).orElseThrow(()->new UsernameNotFoundException(String.format("User %s not found", username)));
+        logger.info(user.toString());
+
+        return user;
     }
     @Override
     @Transactional
@@ -33,6 +37,7 @@ public class UserService implements UserDetailsService {
         if(user==null){
             throw new UsernameNotFoundException(String.format("User %s not found",username));
         }
+        logger.info("{} {} {} {}",user.getUsername(),user.getPassword(),user.getRoles(),mapRolesAuthorities(user.getRoles()));
         return new org.springframework.security.core.userdetails
                 .User(user.getUsername(),user.getPassword(),mapRolesAuthorities(user.getRoles()));
     }

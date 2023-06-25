@@ -25,8 +25,8 @@ public class Task {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dateTimeToEndTask;
 
-
-    private State state;
+    @Column
+    private String state;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,7 +38,7 @@ public class Task {
         this.title = title;
         this.description = description;
         this.dateTimeToEndTask = dateTime;
-        this.state = State.PLANNED;
+        this.state = State.PLANNED.getCode();
         this.dateTimeToStartTask = LocalDateTime.now();
     }
 
@@ -55,11 +55,11 @@ public class Task {
         return id;
     }
 
-    public State getState() {
+    public String getState() {
         return state;
     }
 
-    public Task setState(State state) {
+    public Task setState(String state) {
         this.state = state;
         return this;
     }

@@ -8,12 +8,12 @@ import java.time.LocalDateTime;
 
 public class TaskDto {
     @NotBlank
-    private String title;
+    private final String title;
 
     @NotBlank
-    private String description;
+    private final String description;
 
-    private LocalDateTime dateTimeToEndTask;
+    private final LocalDateTime dateTimeToEndTask;
 
 
     public TaskDto(String title, String description,

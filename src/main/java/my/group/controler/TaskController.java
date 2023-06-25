@@ -7,8 +7,6 @@ import my.group.repository.TaskRepository;
 import my.group.service.ResponseService;
 import my.group.dto.TaskDto;
 import my.group.service.TaskService;
-import my.group.utility.MyLogger;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,17 +18,22 @@ import java.util.*;
 @RestController
 @RequestMapping("api/")
 public class TaskController {
-    private final Logger logger = new MyLogger().getLogger();
 
-    @Autowired
     TaskRepository taskRepository;
 
-    @Autowired
     TaskService taskService;
 
-    @Autowired
     ResponseService responseService;
+
+    @Autowired
+    public TaskController(TaskRepository taskRepository, TaskService taskService, ResponseService responseService) {
+        this.taskRepository = taskRepository;
+        this.taskService = taskService;
+        this.responseService = responseService;
+    }
+
     @PostMapping("public/tasks")
+    //swagger annotc
     public ResponseEntity<String> addTask(@RequestBody @Valid TaskDto taskDto) {
         Task task = taskService.saveTask(taskDto);
         String message = responseService.getMessage("task.add.success", null);
@@ -41,7 +44,7 @@ public class TaskController {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<String> updateTaskStatus(@PathVariable Long id, @RequestParam("status") State state) {
         String url = "api/public/tasks/" + id;
-        Task task = taskService.updateTaskState(id,state,url);
+        Task task = taskService.updateTaskState(id, state, url);
         String message = responseService.getMessage("task.update.success", null);
         return ResponseEntity.ok(new Response(task, url, HttpStatus.OK, message).toString());
     }
@@ -50,24 +53,31 @@ public class TaskController {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<String> deleteTask(@PathVariable Long id) {
         String url = "api/admin/tasks/" + id;
-        Task deletedTask =  taskService.deleteTask(id,url);
-        String message = responseService.getMessage("task.delete.success",null);
-        return ResponseEntity.ok(new Response(deletedTask, url, HttpStatus.OK,message).toString());
+        Task deletedTask = taskService.deleteTask(id, url);
+        String message = responseService.getMessage("task.delete.success", null);
+        return ResponseEntity.ok(new Response(deletedTask, url, HttpStatus.OK, message).toString());
     }
 
     @GetMapping("public/tasks")
     public ResponseEntity<String> getAllTasks() {
         String url = "api/public/tasks/";
-        List<Response> responses = responseService.getListResponses(taskService.getAllTask(url),url);
+        List<Response> responses = responseService.getListResponses(taskService.getAllTask(url), url);
         return ResponseEntity.ok(responses.toString());
     }
 
     @GetMapping("public/tasks/{id}")
-    public ResponseEntity<String> getTaskById(@PathVariable Long id){
-        String url = "api/admin/tasks/" + id;
-        Task task = taskService.getTaskById(id,url);
-        String message = responseService.getMessage("task.get.success",null);
-        return ResponseEntity.ok(new Response(task, url, HttpStatus.OK,message).toString());
+    public ResponseEntity<String> getTaskById(@PathVariable Long id) {
+        String url = "api/public/tasks/" + id;
+        Task task = taskService.getTaskById(id, url);
+        String message = responseService.getMessage("task.get.success", null);
+        return ResponseEntity.ok(new Response(task, url, HttpStatus.OK, message).toString());
     }
 
+    @GetMapping("admin/task/")
+    public ResponseEntity<String> getAllTaskByPage(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "3") int size) {
+        String url = "api/admin/tasks/";
+        List<Task> task = taskService.getTasksByPage(page, size, url);
+        String message = responseService.getMessage("task.get.success", null);
+        return ResponseEntity.ok(new Response(task, url, HttpStatus.OK, message).toString());
+    }
 }

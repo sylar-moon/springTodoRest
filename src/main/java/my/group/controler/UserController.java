@@ -10,6 +10,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,7 +29,7 @@ public class UserController {
 
     @GetMapping("")
     public ResponseEntity<String> getRole(Principal principal) {
-        User user = userRepository.findUserByUsername(principal.getName());
+        User user = userRepository.findUserByUsername(principal.getName()).orElseThrow(()->new UsernameNotFoundException(String.format("User %s not found", principal.getName())));
         UserDto userDto = new UserDto(user.getUsername(), user.getRoles());
         String json = new JsonConverter().createJsonFromObjects(userDto);
         String message = messageSource.getMessage("my.getInfo",null, LocaleContextHolder.getLocale());

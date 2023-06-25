@@ -1,4 +1,4 @@
-package my.group.Exception;
+package my.group.exception;
 
 import my.group.model.Response;
 import my.group.utility.MyLogger;
@@ -17,18 +17,18 @@ public class ExceptionHandlerController {
     public Response handleNoContentException(NoContentException ex) {
         logger.error(ex.getErrorMessage());
         logger.error(ex.getHttpStatus().toString());
-        return new Response(null, ex.getUrl(), ex.getHttpStatus(),ex.getErrorMessage());
+        return new Response(null, ex.getUrl(), ex.getHttpStatus(), ex.getErrorMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BadRequestException.class)
     public Response handleBadRequestException(BadRequestException ex) {
-        return new Response(ex.getObject(), ex.getUrl(), ex.getHttpStatus(),ex.getErrorMessage());
+        return new Response(ex.getObject(), ex.getUrl(), ex.getHttpStatus(), ex.getErrorMessage());
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)
     public Response handleNotFoundExceptions(NotFoundException ex) {
-        return new Response(null, ex.getUrl(), ex.getHttpStatus(),ex.getErrorMessage());
+        return new Response(null, ex.getUrl(), ex.getHttpStatus(), ex.getErrorMessage());
     }
 }

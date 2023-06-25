@@ -1,10 +1,10 @@
 package my.group.service;
 
-import my.group.Exception.BadRequestException;
-import my.group.Exception.NoContentException;
-import my.group.Exception.NotFoundException;
+import my.group.exception.BadRequestException;
+import my.group.exception.NoContentException;
+import my.group.exception.NotFoundException;
 import my.group.dto.TaskDto;
-import my.group.model.Response;
+import my.group.model.Role;
 import my.group.model.State;
 import my.group.model.Task;
 import my.group.repository.TaskRepository;
@@ -13,26 +13,41 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import javax.naming.NotContextException;
-import java.util.Iterator;
+import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 @Service
 public class TaskService {
     private final Logger logger = new MyLogger().getLogger();
 
-    @Autowired
     TaskRepository taskRepository;
 
-    @Autowired
     MessageSource messageSource;
 
-    @Autowired
     StatusValidateService validateService;
 
+    @Autowired
+    public TaskService setTaskRepository(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
+        return this;
+    }
+
+    @Autowired
+    public TaskService setMessageSource(MessageSource messageSource) {
+        this.messageSource = messageSource;
+        return this;
+    }
+
+    @Autowired
+    public TaskService setValidateService(StatusValidateService validateService) {
+        this.validateService = validateService;
+        return this;
+    }
 
     public Task getTaskById(Long id, String url) {
         if (taskRepository.existsById(id)) {
@@ -70,26 +85,39 @@ public class TaskService {
     }
 
 
-    public Task updateTaskState(Long id, State state, String url) {
+    public Task updateTaskState(Long id, State updateState, String url) {
         Task task = getTaskById(id, url);
-        State currentState = task.getState();
-        if (validateService.isValidStatus(task, state)) {
-            task.setState(state);
+        State currentState = State.valueOf(task.getState());
+        if (validateService.isValidStatus(currentState, updateState)) {
+            task.setState(updateState.getCode());
             taskRepository.save(task);
         } else {
             String errorMessage = messageSource.getMessage("task.update.invalidStatus",
-                    new Object[]{task.getState(), state}, LocaleContextHolder.getLocale());
+                    new Object[]{new Role(task.getState()).getName(), updateState}, LocaleContextHolder.getLocale());
             throw new BadRequestException(errorMessage, url, task);
         }
-        logger.info("Issue status updated from {} to {}",currentState,state);
+        logger.info("Issue status updated from {} to {}", currentState, updateState);
         return task;
     }
 
     public Task saveTask(TaskDto taskDto) {
         Task task = new Task(taskDto.getTitle(), taskDto.getDescription(), taskDto.getDateTimeToEndTask());
         taskRepository.save(task);
-        logger.info("Task saved: {}",task);
+        logger.info("Task saved: {}", task);
         return task;
+    }
+
+    public List<Task> getTasksByPage(int page, int size, String url) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Task> taskPage = taskRepository.findAll(pageable);
+        List<Task> result = taskPage.getContent();
+        if (result.isEmpty()) {
+            String errorMessage = messageSource.getMessage("task.getAll.noContent", null,
+                    LocaleContextHolder.getLocale());
+            logger.error(errorMessage);
+            throw new NoContentException(errorMessage, url);
+        }
+        return result;
     }
 }
 

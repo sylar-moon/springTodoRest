@@ -2,8 +2,6 @@ package my.group.service;
 
 import my.group.model.Response;
 import my.group.model.Task;
-import my.group.utility.MyLogger;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -16,8 +14,6 @@ import java.util.stream.StreamSupport;
 
 @Service
 public class ResponseService {
-
-    private final Logger logger = new MyLogger().getLogger();
 
     @Autowired
     MessageSource messageSource;
