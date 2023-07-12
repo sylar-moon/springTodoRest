@@ -7,12 +7,15 @@ import io.gatling.javaapi.http.HttpProtocolBuilder;
 
 public class GatlingTest extends Simulation {
 
-    HttpProtocolBuilder httpProtocol = HttpDsl.http.baseUrl("http://localhost:5000/");
+    HttpProtocolBuilder httpProtocol = HttpDsl.http.baseUrl("http://springapp-env.eba-pch5mnqp.us-west-2.elasticbeanstalk.com/");
 
     public GatlingTest(){
         this.setUp(
           Scenario.addTaskScenario.injectOpen(
-                  CoreDsl.constantUsersPerSec(1).during(1)
+                  CoreDsl.atOnceUsers(1),
+                  CoreDsl.nothingFor(3),
+                  CoreDsl.rampUsersPerSec(1).to(5).during(10),
+                  CoreDsl.constantUsersPerSec(3).during(10)
           ) .protocols(httpProtocol)
         );
     }

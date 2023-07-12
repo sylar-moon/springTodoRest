@@ -1,4 +1,4 @@
-package my.group.controler;
+package my.group.controller;
 
 import my.group.dto.UserDto;
 import my.group.model.Response;

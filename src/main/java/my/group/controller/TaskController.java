@@ -1,4 +1,4 @@
-package my.group.controler;
+package my.group.controller;
 
 import my.group.model.Response;
 import my.group.model.State;
@@ -33,7 +33,7 @@ public class TaskController {
     }
 
     @PostMapping("public/tasks")
-    //swagger annotc
+    //swagger annotacion
     public ResponseEntity<String> addTask(@RequestBody @Valid TaskDto taskDto) {
         Task task = taskService.saveTask(taskDto);
         String message = responseService.getMessage("task.add.success", null);

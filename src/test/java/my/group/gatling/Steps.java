@@ -9,7 +9,7 @@ import java.util.Base64;
 import static io.gatling.javaapi.core.CoreDsl.StringBody;
 
 public class Steps {
-    public static ChainBuilder authReq = CoreDsl.exec(
+    public static ChainBuilder taskReq = CoreDsl.exec(
             HttpDsl.http("addTask")
                     .post("/api/public/tasks")
                     .header("Authorization",
@@ -18,7 +18,7 @@ public class Steps {
                     .body(StringBody("{\n" +
                             "  \"title\": \"Вигуляти пса\",\n" +
                             "  \"description\": \"Після роботи вигуляти пса\",\n" +
-                            "  \"dateTimeToEndTask\": \"2023-06-26 18:30:00\"\n" +
+                            "  \"dateTimeToEndTask\": \"2023-07-09 18:30:00\"\n" +
                             "}"))
                     .check(HttpDsl.status().is(200))
     );

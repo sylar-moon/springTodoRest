@@ -6,5 +6,5 @@ import io.gatling.javaapi.core.ScenarioBuilder;
 public class Scenario {
 
   public static   ScenarioBuilder addTaskScenario = CoreDsl.scenario("add task scenario")
-            .exec(Steps.authReq);
+            .exec(Steps.taskReq);
 }

@@ -5,6 +5,7 @@ import my.group.model.User;
 import my.group.repository.UserRepository;
 import my.group.utility.MyLogger;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
-    private final Logger logger = new MyLogger().getLogger();
+    private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     private UserRepository repository;
