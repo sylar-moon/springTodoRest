@@ -23,7 +23,7 @@ public class LoggingAspectTaskController {
     }
 
     @Around("execution(* my.group.controller.TaskController.getAllTasks())")
-    public Object logTimeGetAllTasks(ProceedingJoinPoint joinPoint) {
+    public Object logTimeGetAllTasks(ProceedingJoinPoint joinPoint) throws Throwable {
         return logTimeExecuteMethodAndReturnResult(joinPoint, "getAllTasks");
     }
 
@@ -33,7 +33,7 @@ public class LoggingAspectTaskController {
     }
 
     @Around("execution(* my.group.controller.TaskController.addTask(..))")
-    public Object logTimeAddTask(ProceedingJoinPoint joinPoint) {
+    public Object logTimeAddTask(ProceedingJoinPoint joinPoint) throws Throwable {
         return logTimeExecuteMethodAndReturnResult(joinPoint, "addTask");
     }
 
@@ -43,7 +43,7 @@ public class LoggingAspectTaskController {
     }
 
     @Around("execution(* my.group.controller.TaskController.deleteTask(..))")
-    public Object logTimeDeleteTask(ProceedingJoinPoint joinPoint) {
+    public Object logTimeDeleteTask(ProceedingJoinPoint joinPoint) throws Throwable {
         return logTimeExecuteMethodAndReturnResult(joinPoint, "deleteTask");
     }
 
@@ -54,7 +54,7 @@ public class LoggingAspectTaskController {
 
 
     @Around("execution(* my.group.controller.TaskController.updateTaskStatus(..))")
-    public Object logTimeUpdateTaskStatus(ProceedingJoinPoint joinPoint) {
+    public Object logTimeUpdateTaskStatus(ProceedingJoinPoint joinPoint) throws Throwable {
         return logTimeExecuteMethodAndReturnResult(joinPoint, "updateTaskStatus");
     }
 
@@ -64,7 +64,7 @@ public class LoggingAspectTaskController {
     }
 
     @Around("execution(* my.group.controller.TaskController.getTaskById(..))")
-    public Object logTimeGetTaskById(ProceedingJoinPoint joinPoint) {
+    public Object logTimeGetTaskById(ProceedingJoinPoint joinPoint) throws Throwable {
         return logTimeExecuteMethodAndReturnResult(joinPoint, "getTaskById");
     }
 
@@ -74,22 +74,16 @@ public class LoggingAspectTaskController {
     }
 
     @Around("execution(* my.group.controller.TaskController.getAllTaskByPage(..))")
-    public Object logTimeGetAllTaskByPage(ProceedingJoinPoint joinPoint) {
+    public Object logTimeGetAllTaskByPage(ProceedingJoinPoint joinPoint) throws Throwable {
         return logTimeExecuteMethodAndReturnResult(joinPoint, "getAllTaskByPage");
     }
 
-    private Object logTimeExecuteMethodAndReturnResult(ProceedingJoinPoint joinPoint, String nameMethod) {
-        Object result = null;
-        try {
-            LocalDateTime startTime = LocalDateTime.now();
-            result = joinPoint.proceed();
-            LocalDateTime endTime = LocalDateTime.now();
-            Duration duration = Duration.between(startTime, endTime);
-            logger.info("Time to execute {}: {}.millis", nameMethod, duration.toMillis());
-        } catch (Throwable throwable) {
-            logger.error("Unable to run {} method", nameMethod, throwable);
-            System.exit(0);
-        }
+    private Object logTimeExecuteMethodAndReturnResult(ProceedingJoinPoint joinPoint, String nameMethod) throws Throwable {
+        LocalDateTime startTime = LocalDateTime.now();
+        Object result = joinPoint.proceed();
+        LocalDateTime endTime = LocalDateTime.now();
+        Duration duration = Duration.between(startTime, endTime);
+        logger.info("Time to execute {}: {}.millis", nameMethod, duration.toMillis());
         return result;
     }
 

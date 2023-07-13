@@ -1,8 +1,13 @@
 package my.group.exception;
 
+import my.group.service.TaskService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 
 public class BadRequestException  extends RuntimeException{
+    private final Logger logger = LoggerFactory.getLogger(BadRequestException.class);
+
     private final String errorMessage;
     private final String url;
     private final HttpStatus httpStatus;

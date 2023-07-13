@@ -4,11 +4,9 @@ import my.group.exception.BadRequestException;
 import my.group.exception.NoContentException;
 import my.group.exception.NotFoundException;
 import my.group.dto.TaskDto;
-import my.group.model.Role;
 import my.group.model.State;
 import my.group.model.Task;
 import my.group.repository.TaskRepository;
-import my.group.utility.MyLogger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,13 +86,13 @@ public class TaskService {
 
     public Task updateTaskState(Long id, State updateState, String url) {
         Task task = getTaskById(id, url);
-        State currentState = State.valueOf(task.getState());
+        State currentState = task.getState();
         if (validateService.isValidStatus(currentState, updateState)) {
-            task.setState(updateState.getCode());
+            task.setState(updateState);
             taskRepository.save(task);
         } else {
             String errorMessage = messageSource.getMessage("task.update.invalidStatus",
-                    new Object[]{new Role(task.getState()).getName(), updateState}, LocaleContextHolder.getLocale());
+                    new Object[]{currentState, updateState}, LocaleContextHolder.getLocale());
             throw new BadRequestException(errorMessage, url, task);
         }
         logger.info("Issue status updated from {} to {}", currentState, updateState);

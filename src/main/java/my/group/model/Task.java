@@ -26,7 +26,8 @@ public class Task {
     private LocalDateTime dateTimeToEndTask;
 
     @Column
-    private String state;
+    @Enumerated(EnumType.STRING)
+    private State state;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,7 +39,7 @@ public class Task {
         this.title = title;
         this.description = description;
         this.dateTimeToEndTask = dateTime;
-        this.state = State.PLANNED.getCode();
+        this.state = State.PLANNED;
         this.dateTimeToStartTask = LocalDateTime.now();
     }
 
@@ -55,11 +56,11 @@ public class Task {
         return id;
     }
 
-    public String getState() {
+    public State getState() {
         return state;
     }
 
-    public Task setState(String state) {
+    public Task setState(State state) {
         this.state = state;
         return this;
     }
