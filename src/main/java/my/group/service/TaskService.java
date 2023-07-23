@@ -99,8 +99,7 @@ public class TaskService {
         return task;
     }
 
-    public Task saveTask(TaskDto taskDto) {
-        Task task = new Task(taskDto.getTitle(), taskDto.getDescription(), taskDto.getDateTimeToEndTask());
+    public Task saveTask(Task task) {
         taskRepository.save(task);
         logger.info("Task saved: {}", task);
         return task;

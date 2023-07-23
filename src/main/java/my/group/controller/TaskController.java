@@ -35,7 +35,7 @@ public class TaskController {
     @PostMapping("public/tasks")
     //swagger annotacion
     public ResponseEntity<String> addTask(@RequestBody @Valid TaskDto taskDto) {
-        Task task = taskService.saveTask(taskDto);
+        Task task = taskService.saveTask(new Task(taskDto.getTitle(), taskDto.getDescription(), taskDto.getDateTimeToEndTask()));
         String message = responseService.getMessage("task.add.success", null);
         return ResponseEntity.ok(new Response(task, "api/public/tasks", HttpStatus.OK, message).toString());
     }
