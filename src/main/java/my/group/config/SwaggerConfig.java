@@ -14,16 +14,16 @@ import org.springframework.context.annotation.Configuration;
 public class SwaggerConfig {
 
 
-    private String version = "2.0";
+//    private String version = "2.0";
 //    @Value("${project.version}")
 //    private String version;
-//
-//    @Autowired
-//    private BuildProperties buildProperties;
+
+    @Autowired
+    private BuildProperties buildProperties;
 
     @Bean
     public OpenAPI customOpenAPI() {
-//        String version = buildProperties.getVersion();
+        String version = buildProperties.getVersion();
 
         OpenAPI openAPI = new OpenAPI();
         Info info = new Info();

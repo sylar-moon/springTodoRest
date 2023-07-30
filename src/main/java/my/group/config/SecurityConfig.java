@@ -55,7 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     String message = messageSource.getMessage("security.authentication",
                             new Object[]{userName, userRole, uri}, LocaleContextHolder.getLocale());
 
-                    response.getWriter().write(jsonConverter.createJsonFromObjects(new Response(null, uri, HttpStatus.FORBIDDEN, message)));
+                    response.getWriter().write(jsonConverter.createJsonFromObjects(new Response(null, HttpStatus.FORBIDDEN, message)));
                 });
 
         super.configure(http);

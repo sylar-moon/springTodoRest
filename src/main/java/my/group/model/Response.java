@@ -1,48 +1,35 @@
 package my.group.model;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import my.group.utility.MyLogger;
-import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 
 public class Response {
 
-    private String obj;
-    private  String url;
-    private  HttpStatus status;
+    private String task;
+    private HttpStatus status;
     private String message;
 
-    public Response(){}
+    public Response() {
+    }
 
-    public Response(Object task, String url, HttpStatus status,String message) {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        mapper.enable(SerializationFeature.INDENT_OUTPUT);
-        try {
-            this.obj = mapper.writeValueAsString(task);
-        } catch (JsonProcessingException e) {
-            Logger logger = new MyLogger().getLogger();
-            logger.error("Unable to serialize task object:{}  to json format",task,e);
-        }
-        this.url = url;
+    public Response(Object obj, HttpStatus status, String message) {
+        this.task =obj.toString();
         this.status = status;
-        this.message=message;
+        this.message = message;
     }
 
-    public String getObj() {
-        return obj;
+
+    public Response( HttpStatus status, String message) {
+        this.status = status;
+        this.message = message;
     }
 
-    public Response setObj(String obj) {
-        this.obj = obj;
+    public String getTask() {
+        return task;
+    }
+
+    public Response setTask(String task) {
+        this.task = task;
         return this;
-    }
-
-    public String getUrl() {
-        return url;
     }
 
     public HttpStatus getStatus() {
@@ -58,11 +45,6 @@ public class Response {
         return this;
     }
 
-    public Response setUrl(String url) {
-        this.url = url;
-        return this;
-    }
-
     public Response setStatus(HttpStatus status) {
         this.status = status;
         return this;
@@ -71,8 +53,7 @@ public class Response {
     @Override
     public String toString() {
         return "Response{" +
-                "obj='" + obj + '\'' +
-                ", url='" + url + '\'' +
+                "obj='" + task + '\'' +
                 ", status=" + status +
                 ", message='" + message + '\'' +
                 '}';

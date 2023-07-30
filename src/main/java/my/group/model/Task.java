@@ -1,6 +1,7 @@
 package my.group.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -8,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table
-public class Task {
+public class Task  extends RepresentationModel<Task>{
 
     @Column
     @NotBlank

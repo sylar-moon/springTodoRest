@@ -16,7 +16,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -105,7 +104,6 @@ class TaskServiceTest {
         verify(repository, times(1)).findById(1L);
         verify(repository, times(1)).deleteById(1L);
         init();
-
     }
 
 

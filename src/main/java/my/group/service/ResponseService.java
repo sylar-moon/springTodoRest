@@ -1,5 +1,6 @@
 package my.group.service;
 
+import my.group.dto.TaskDtoResponse;
 import my.group.model.Response;
 import my.group.model.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,16 +15,17 @@ import java.util.stream.StreamSupport;
 
 @Service
 public class ResponseService {
-
+    @Autowired
+    TaskService taskService;
     @Autowired
     MessageSource messageSource;
 
-    public List<Response> getListResponses(Iterable<Task> allTask, String url) {
-        String message = getMessage("task.get.success",null);
-        return StreamSupport.stream(allTask.spliterator(), false)
-                .map(task -> new Response(task, url, HttpStatus.OK, message))
-                .collect(Collectors.toList());
-    }
+//    public List<TaskDtoResponse> getListResponses(Iterable<Task> allTask) {
+//        String message = getMessage("task.get.success",null);
+//        return StreamSupport.stream(allTask.spliterator(), false)
+//                .map(task -> )
+//                .collect(Collectors.toList());
+//    }
 
 
     public String getMessage(String key, Object[] obj){

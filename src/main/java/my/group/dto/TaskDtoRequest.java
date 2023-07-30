@@ -2,11 +2,19 @@ package my.group.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import my.group.model.State;
+import my.group.model.Task;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
 
-public class TaskDto {
+public class TaskDtoRequest {
+
     @NotBlank
     private final String title;
 
@@ -15,9 +23,8 @@ public class TaskDto {
 
     private final LocalDateTime dateTimeToEndTask;
 
-
-    public TaskDto(String title, String description,
-                   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")LocalDateTime dateTimeToEndTask) {
+    public TaskDtoRequest(String title, String description,
+                           @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")  LocalDateTime dateTimeToEndTask) {
         this.title = title;
         this.description = description;
         this.dateTimeToEndTask = dateTimeToEndTask;
@@ -44,4 +51,6 @@ public class TaskDto {
                 ", dateTimeToEndTask=" + dateTimeToEndTask +
                 '}';
     }
+
+
 }
